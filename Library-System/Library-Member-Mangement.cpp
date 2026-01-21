@@ -1,6 +1,6 @@
 #include "Books.h"
 #include "members.h"
-#include "library.h"
+#include "Library-Member-Management.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -57,46 +57,17 @@ bool checkDate(const string &date)
 
 Library::Library()
 {
-    loadBooks();
     loadMembers();
 }
 
 Library::~Library()
 {
-    saveBooks();
     saveMembers();
     for (auto m : members)
         delete m;
     members.clear();
 }
 
-void Library::loadBooks()
-{
-    ifstream inputFile("Books.csv");
-    if (!inputFile)
-        return;
-    string line;
-    getline(inputFile, line);
-    while (getline(inputFile, line))
-    {
-        stringstream ss(line);
-        string idStr, titleStr, authorStr, isbnStr;
-
-        getline(ss, idStr, ',');
-        getline(ss, titleStr, ',');
-        getline(ss, authorStr, ',');
-        getline(ss, isbnStr);
-
-        int id = idStr.empty() ? 0 : stoi(idStr);
-        int isbn = isbnStr.empty() ? 0 : stoi(isbnStr);
-
-        if (!idStr.empty())
-        {
-            books.push_back(Book(id, titleStr, authorStr, isbn));
-        }
-    }
-    inputFile.close();
-}
 
 void Library::loadMembers()
 {
@@ -133,22 +104,6 @@ void Library::loadMembers()
         }
     }
     inFile.close();
-}
-
-void Library::saveBooks()
-{
-    ofstream outputFile("Books.csv");
-    if (!outputFile)
-        return;
-
-    outputFile << "ID,Title,Author,ISBN\n";
-
-    for (auto &b : books)
-    {
-        b.writeToFile(outputFile);
-    }
-
-    outputFile.close();
 }
 
 void Library::saveMembers()

@@ -12,15 +12,12 @@
 class Library
 {
 private:
-    std::vector<Book> books;
     std::vector<LibraryMember *> members;
 
 public:
     Library();
     ~Library();
-    void loadBooks();
     void loadMembers();
-    void saveBooks();
     void saveMembers();
     void addMember();
     LibraryMember* searchMember() const;
