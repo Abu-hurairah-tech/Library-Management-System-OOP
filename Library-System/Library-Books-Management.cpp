@@ -12,7 +12,7 @@ using namespace std;
 
 bool checkISBN(int i)
 {
-    return i >= 1000000000;
+    return i >= 1000000000 && i <= 9999999999;
 }
 
 BooksManager::BooksManager() {}
@@ -28,19 +28,27 @@ void BooksManager::loadBooks()
     while (getline(inputFile, line))
     {
         stringstream ss(line);
-        string idStr, titleStr, authorStr, isbnStr;
+        string idStr, titleStr, authorStr, isbnStr, statusStr, copiesStr;
 
         getline(ss, idStr, ',');
         getline(ss, titleStr, ',');
         getline(ss, authorStr, ',');
-        getline(ss, isbnStr);
+        getline(ss, isbnStr, ',');
+        getline(ss, statusStr, ',');
+        getline(ss, copiesStr);
 
         int id = idStr.empty() ? 0 : stoi(idStr);
         int isbn = isbnStr.empty() ? 0 : stoi(isbnStr);
+        int copies = copiesStr.empty() ? 0 : stoi(copiesStr);
 
         if (!idStr.empty())
         {
-            books.push_back(Book(id, titleStr, authorStr, isbn));
+            Book b(id, titleStr, authorStr, isbn);
+            if (!statusStr.empty())
+                b.setStatus(statusStr);
+            if (copies > 0)
+                b.setCopies(copies);
+            books.push_back(b);
         }
     }
     inputFile.close();
@@ -51,7 +59,7 @@ void BooksManager::saveBooks()
     if (!outputFile)
         return;
 
-    outputFile << "ID,Title,Author,ISBN\n";
+    outputFile << "ID,Title,Author,ISBN,Status,Copies\n";
 
     for (auto &b : books)
     {
@@ -119,7 +127,23 @@ void BooksManager::addBook()
     } while (!validISBN);
     cin.ignore();
 
-    books.push_back(Book(id, title, author, isbn));
+    Book newBook(id, title, author, isbn);
+    int copies;
+    cout << "Enter number of copies: ";
+    do
+    {
+        cin >> copies;
+
+        if (cin.fail() || copies <= 0)
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid copies. Try again: ";
+        }
+
+    } while (cin.fail() || copies <= 0);
+    newBook.setCopies(copies);
+    books.push_back(newBook);
     saveBooks();
     cout << "Book added successfully.\n";
 }
@@ -209,13 +233,13 @@ Book *BooksManager::searchByISBN()
     }
 
     int isbn;
-    cout << "Enter Book ID to search: ";
+    cout << "Enter Book ISBN to search: ";
     cin >> isbn;
-    while (cin.fail() || isbn <= 0)
+    while (cin.fail())
     {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid ID. Try again: ";
+        cout << "Invalid ISBN. Try again: ";
         cin >> isbn;
     }
 
@@ -264,7 +288,12 @@ int BooksManager::getTotalBooks()
 
 int BooksManager::getAvailableBooks()
 {
-    return Book::getCopies();
+    int totalCopies = 0;
+    for (const auto &b : books)
+    {
+        totalCopies += b.getCopies();
+    }
+    return totalCopies;
 }
 
 void BooksManager::updateBook()
