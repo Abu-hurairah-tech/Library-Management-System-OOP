@@ -9,14 +9,14 @@
 #include <fstream>
 #include <algorithm>
 
-class Library
+class MemberManager
 {
 private:
     std::vector<LibraryMember *> members;
 
 public:
-    Library();
-    ~Library();
+    MemberManager();
+    ~MemberManager();
     void loadMembers();
     void saveMembers();
     void addMember();

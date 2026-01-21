@@ -55,12 +55,12 @@ bool checkDate(const string &date)
     return true;
 }
 
-Library::Library()
+MemberManager::MemberManager()
 {
     loadMembers();
 }
 
-Library::~Library()
+MemberManager::~MemberManager()
 {
     saveMembers();
     for (auto m : members)
@@ -69,7 +69,7 @@ Library::~Library()
 }
 
 
-void Library::loadMembers()
+void MemberManager::loadMembers()
 {
     ifstream inFile("Members.csv");
     if (!inFile)
@@ -106,7 +106,7 @@ void Library::loadMembers()
     inFile.close();
 }
 
-void Library::saveMembers()
+void MemberManager::saveMembers()
 {
     ofstream outputFile("Members.csv");
     if (!outputFile)
@@ -122,7 +122,7 @@ void Library::saveMembers()
     outputFile.close();
 }
 
-void Library::addMember()
+void MemberManager::addMember()
 {
     int choice;
     cout << "1. Student\n2. Faculty" << endl;
@@ -217,7 +217,7 @@ void Library::addMember()
     saveMembers();
 }
 
-LibraryMember *Library::searchMember() const
+LibraryMember *MemberManager::searchMember() const
 {
     if (members.empty())
     {
@@ -246,7 +246,7 @@ LibraryMember *Library::searchMember() const
     return nullptr;
 }
 
-void Library::removeMember()
+void MemberManager::removeMember()
 {
     int id;
     cout << "Enter Member ID to search: ";
