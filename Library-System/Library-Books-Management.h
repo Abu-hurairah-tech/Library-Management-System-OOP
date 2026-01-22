@@ -28,6 +28,8 @@ public:
     void updateBook();
     int getTotalBooks();
     int getAvailableBooks();
+
+    void displayBooks() const;
 };
 
 #endif
