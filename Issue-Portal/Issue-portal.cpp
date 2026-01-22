@@ -51,12 +51,15 @@ IssueRecords ::~IssueRecords() {}
 int IssueRecords::getMemberID() const { return memberID_; }
 int IssueRecords::getBookID() const { return bookID_; }
 string IssueRecords::getDateOfIssue() const { return dateOfIssue_; }
-void IssueRecords::setDateOfIssue(const string& d)
+bool IssueRecords::setDateOfIssue(const string& d)
 {
     if (checkDate(d))
+    {
         dateOfIssue_ = d;
+        return true;
+    }
     else
-        cout << "Invalid Date! Try Again." << endl;
+        return false;
 }
 bool IssueRecords::isReturned() const { return returnStatus_; }
 

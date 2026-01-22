@@ -1,3 +1,5 @@
+#ifndef ISSUE_H
+#define ISSUE_H
 #include "Books.h"
 #include "members.h"
 #include "Library.h"
@@ -26,7 +28,8 @@ public:
     bool isReturned() const;
 
     void setReturned(bool r);
-    void setDateOfIssue(const string &d);
+    bool setDateOfIssue(const string &d);
     string toCSV() const;
     ~IssueRecords();
 };
+#endif
