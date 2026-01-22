@@ -187,3 +187,33 @@ void Library::returnBooks()
     }
     cout << "No active issue record found for this book and member! " << endl;
 }
+
+void Library::addBook()
+{
+    booksMgr.addBook();
+}
+
+void Library::removeBook()
+{
+    booksMgr.removeBook();
+}
+
+void Library::displayBooks()
+{
+    booksMgr.displayBooks();
+}
+
+void Library::addMember()
+{
+    membersMgr.addMember();
+}
+
+void Library::removeMember()
+{
+    membersMgr.removeMember();
+}
+
+void Library::displayMembers()
+{
+    membersMgr.displayMembers();
+}
