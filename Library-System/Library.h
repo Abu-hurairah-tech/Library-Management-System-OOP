@@ -20,12 +20,25 @@ private:
     vector<IssueRecords> issuedBooks;
 
 public:
-    void issueBook();
-    void returnBooks();
-    void saveIssuedBooks();
-    void loadIssuedBooks();
     Library();
     ~Library();
+
+    // BOOK OPERATIONS
+    void addBook();
+    void removeBook();
+    void displayBooks();
+
+    // MEMBER OPERATIONS
+    void addMember();
+    void removeMember();
+    void displayMembers();
+
+    // ISSUE / RETURN
+    void issueBook();
+    void returnBooks();
+
+    void loadIssuedBooks();
+    void saveIssuedBooks();
 };
 
 #endif
