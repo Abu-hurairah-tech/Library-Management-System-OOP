@@ -22,5 +22,6 @@ public:
     void addMember();
     LibraryMember* searchMember() const;
     void removeMember();
+    void displayMembers() const;
 };
 #endif
