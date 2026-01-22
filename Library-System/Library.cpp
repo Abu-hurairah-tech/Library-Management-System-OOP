@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <sstream>
 #include <fstream>
 #include <algorithm>
 using namespace std;
@@ -48,6 +49,36 @@ bool checkDate(const string &date)
 Library::Library() {}
 Library::~Library() {}
 
+void Library::loadIssuedBooks()
+{
+    ifstream inputFile("Issue.csv");
+    if (!inputFile)
+        return;
+    string line;
+    getline(inputFile, line);
+    while (getline(inputFile, line))
+    {
+        stringstream ss(line);
+        string mid, bid, returned, doi;
+
+        getline(ss, mid, ',');
+        getline(ss, bid, ',');
+        getline(ss, doi, ',');
+        getline(ss, returned);
+
+        int id = mid.empty() ? 0 : stoi(mid);
+        int bookid = bid.empty() ? 0 : stoi(bid);
+        bool returnStat = returned.empty() ? true : false;
+
+        if (!mid.empty() && !bid.empty())
+        {
+            IssueRecords i(id, bookid, doi, returnStat);
+            issuedBooks.push_back(i);
+        }
+    }
+    inputFile.close();
+}
+
 void Library::saveIssuedBooks()
 {
     ofstream outputFile("Issue.csv");
@@ -55,52 +86,78 @@ void Library::saveIssuedBooks()
         return;
 
     outputFile << "Member ID,Book ID,Date Of Issue,Return Status" << endl;
-    
+    for (auto &i : issuedBooks)
+    {
+        i.writeToFile(outputFile);
+    }
 }
 
 void Library::issueBook()
 {
-    int memberID, bookID;
-    string date;
-    cout << "Enter Member ID: ";
-    cin >> memberID;
-
+    // Search for member
     LibraryMember *member = membersMgr.searchMember();
     if (!member)
         return;
 
-    cout << "Enter Book ID: ";
-    cin >> bookID;
+    // Check borrow limit first
+    if (member->getNumberOfBooksBorrowed() >= member->getBorrowLimit())
+    {
+        cout << "Borrow Limit Reached!\n";
+        return;
+    }
+
+    // Search for book
     Book *book = booksMgr.searchByID();
     if (!book)
         return;
 
+    // Check if book has copies available
+    if (book->getCopies() <= 0)
+    {
+        cout << "No copies available for this book!\n";
+        return;
+    }
+
+    for (const auto &record : issuedBooks)
+    {
+        if (record.getMemberID() == member->getMemberID() &&
+            record.getBookID() == book->getID() &&
+            !record.isReturned())
+        {
+            cout << "This book is already issued to this member!\n";
+            return;
+        }
+    }
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    // Get issue date
+    string date;
     bool validDate = false;
-    cout << "Enter Issue Date (DD MM YYYY):";
+    cout << "Enter Issue Date (DD MM YYYY): ";
     do
     {
         getline(cin, date);
         if (checkDate(date))
             validDate = true;
         else
-            cout << "Invalid Date! Try Again." << endl;
+            cout << "Invalid Date! Try Again: ";
     } while (!validDate);
 
-    if (book->getCopies() > 0)
-    {
-        book->setCopies(book->getCopies() - 1);
-        member->setNumberOfBooksBorrowed(member->getNumberOfBooksBorrowed() + 1);
-        booksMgr.saveBooks();
-        membersMgr.saveMembers();
+    // Update book copies and status
+    book->setCopies(book->getCopies() - 1);
 
-        cout << "Transaction Successful! Book Issued to Member " << member->getName() << endl;
-    }
-    else
-    {
-        if(member->getNumberOfBooksBorrowed() >= member->getBorrowLimit())
-        {
-            cout << "Borrow Limit Reached!";
-            return;
-        }
-    }
+    // Update member borrow count
+    member->setNumberOfBooksBorrowed(member->getNumberOfBooksBorrowed() + 1);
+
+    // Create issue record
+    IssueRecords issue(member->getMemberID(), book->getID(), date, false);
+    issuedBooks.push_back(issue);
+
+    // Save all changes
+    booksMgr.saveBooks();
+    membersMgr.saveMembers();
+    saveIssuedBooks();
+
+    cout << "Transaction Successful! Book Issued to Member " << member->getName() << endl;
 }

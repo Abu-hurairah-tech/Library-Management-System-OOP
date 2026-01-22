@@ -4,6 +4,7 @@
 #include "members.h"
 #include "Library-Books-Management.h"
 #include "Library-Member-Management.h"
+#include "Issue.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,16 +12,18 @@
 #include <fstream>
 #include <algorithm>
 
-
 class Library
 {
 private:
     BooksManager booksMgr;
     MemberManager membersMgr;
+    vector<IssueRecords> issuedBooks;
 
 public:
     void issueBook();
+    void returnBooks();
     void saveIssuedBooks();
+    void loadIssuedBooks();
     Library();
     ~Library();
 };
