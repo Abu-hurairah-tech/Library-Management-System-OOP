@@ -19,6 +19,12 @@ public:
     Person(const string &n = "", const string &e = "", int p = 0);
     Person (const Person& rhs);
     Person& operator=(const Person& rhs);
+    string getName() const;
+    string getEmail() const;
+    int getPhone() const;
+    void setName(string n);
+    void setEmail(string e);
+    void setPhone(int p);
     virtual ~Person();
     virtual void displayDetails() const = 0;
 };

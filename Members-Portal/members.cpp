@@ -11,6 +11,12 @@ static constexpr double FACULTY_FINE_RATE = 50.0;
 
 Person::Person() : name_(""), email_(""), phone_(0) {}
 Person::Person(const string &n, const string &e, int p) : name_(n), email_(e), phone_(p > 0 ? p : 0) {}
+string Person::getName() const{return name_;}
+string Person::getEmail() const{return email_;}
+int Person::getPhone() const{return phone_;}
+void Person::setName(string n){name_ = n;}
+void Person::setEmail(string e){email_ = e;}
+void Person::setPhone(int p){phone_ = p;}
 Person::Person(const Person &rhs)
 {
     this->name_ = rhs.name_;
