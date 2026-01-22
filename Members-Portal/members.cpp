@@ -119,6 +119,7 @@ Student &Student::operator=(const Student &rhs)
     return *this;
 }
 double Student::calculateFine(int days) const { return days * STUDENT_FINE_RATE; }
+int Student::getAllowedDays() const { return 14; }
 bool Student::hasDegree(const string &d) const { return degree_ == d; }
 int Student::getBorrowLimit() const
 {
@@ -145,6 +146,7 @@ Faculty &Faculty::operator=(const Faculty &rhs)
     return *this;
 }
 double Faculty::calculateFine(int days) const { return days * FACULTY_FINE_RATE; }
+int Faculty::getAllowedDays() const { return 30; }
 bool Faculty::isFromDept(const string &dept) const { return department_ == dept; }
 int Faculty::getBorrowLimit() const
 {

@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <fstream>
 #include <algorithm>
-
+using namespace std;
 class Person
 {
 protected:
@@ -49,6 +49,7 @@ public:
     void setNumberOfBooksBorrowed(int b);
     void setMembershipDate(const string &d);
     virtual double calculateFine(int days) const;
+    virtual int getAllowedDays() const = 0;
     bool operator==(int i) const;
     virtual string toCSV() const;
     void writeToFile(ofstream &outFile) const;
@@ -66,6 +67,7 @@ public:
     Student(const Student &rhs);
     Student &operator=(const Student &rhs);
     double calculateFine(int days) const override;
+    int getAllowedDays() const override;
     int getBorrowLimit() const override;
     void displayDetails() const override;
     bool hasDegree(const string &d) const;
@@ -83,6 +85,7 @@ public:
     Faculty(const Faculty &rhs);
     Faculty &operator=(const Faculty &rhs);
     double calculateFine(int days) const override;
+    int getAllowedDays() const override;
     bool isFromDept(const string &dept) const;
     void displayDetails() const override;
     string toCSV() const override;
