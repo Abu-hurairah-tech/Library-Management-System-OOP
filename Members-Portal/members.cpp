@@ -11,15 +11,21 @@ static constexpr double FACULTY_FINE_RATE = 50.0;
 
 Person::Person() : name_(""), email_(""), phone_(0) {}
 Person::Person(const string &n, const string &e, int p) : name_(n), email_(e), phone_(p > 0 ? p : 0) {}
+string Person::getName() const { return name_; }
+string Person::getEmail() const { return email_; }
+int Person::getPhone() const { return phone_; }
+void Person::setName(string n) { name_ = n; }
+void Person::setEmail(string e) { email_ = e; }
+void Person::setPhone(int p) { phone_ = p; }
 Person::Person(const Person &rhs)
 {
     this->name_ = rhs.name_;
     this->email_ = rhs.email_;
     this->phone_ = rhs.phone_;
 }
-Person& Person::operator=(const Person &rhs)
+Person &Person::operator=(const Person &rhs)
 {
-    if(this != &rhs)
+    if (this != &rhs)
     {
         this->name_ = rhs.name_;
         this->email_ = rhs.email_;
@@ -113,7 +119,12 @@ Student &Student::operator=(const Student &rhs)
     return *this;
 }
 double Student::calculateFine(int days) const { return days * STUDENT_FINE_RATE; }
+int Student::getAllowedDays() const { return 14; }
 bool Student::hasDegree(const string &d) const { return degree_ == d; }
+int Student::getBorrowLimit() const
+{
+    return 3;
+}
 string Student::toCSV() const { return "Student," + LibraryMember::toCSV() + "," + degree_; }
 void Student::displayDetails() const
 {
@@ -135,7 +146,12 @@ Faculty &Faculty::operator=(const Faculty &rhs)
     return *this;
 }
 double Faculty::calculateFine(int days) const { return days * FACULTY_FINE_RATE; }
+int Faculty::getAllowedDays() const { return 30; }
 bool Faculty::isFromDept(const string &dept) const { return department_ == dept; }
+int Faculty::getBorrowLimit() const
+{
+    return 5;
+}
 string Faculty::toCSV() const { return "Faculty," + LibraryMember::toCSV() + "," + department_; }
 
 void Faculty::displayDetails() const

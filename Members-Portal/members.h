@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <fstream>
 #include <algorithm>
-
+using namespace std;
 class Person
 {
 protected:
@@ -19,6 +19,12 @@ public:
     Person(const string &n = "", const string &e = "", int p = 0);
     Person (const Person& rhs);
     Person& operator=(const Person& rhs);
+    string getName() const;
+    string getEmail() const;
+    int getPhone() const;
+    void setName(string n);
+    void setEmail(string e);
+    void setPhone(int p);
     virtual ~Person();
     virtual void displayDetails() const = 0;
 };
@@ -37,11 +43,13 @@ public:
     LibraryMember &operator=(const LibraryMember &rhs);
     int getMemberID() const;
     int getNumberOfBooksBorrowed() const;
+    virtual int getBorrowLimit() const = 0;
     string getMembershipDate() const;
     void setMemberID(int i);
     void setNumberOfBooksBorrowed(int b);
     void setMembershipDate(const string &d);
     virtual double calculateFine(int days) const;
+    virtual int getAllowedDays() const = 0;
     bool operator==(int i) const;
     virtual string toCSV() const;
     void writeToFile(ofstream &outFile) const;
@@ -59,6 +67,8 @@ public:
     Student(const Student &rhs);
     Student &operator=(const Student &rhs);
     double calculateFine(int days) const override;
+    int getAllowedDays() const override;
+    int getBorrowLimit() const override;
     void displayDetails() const override;
     bool hasDegree(const string &d) const;
     string toCSV() const override;
@@ -75,8 +85,10 @@ public:
     Faculty(const Faculty &rhs);
     Faculty &operator=(const Faculty &rhs);
     double calculateFine(int days) const override;
+    int getAllowedDays() const override;
     bool isFromDept(const string &dept) const;
     void displayDetails() const override;
     string toCSV() const override;
+    int getBorrowLimit() const override;
 };
 #endif
