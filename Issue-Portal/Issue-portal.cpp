@@ -65,3 +65,8 @@ bool IssueRecords::isReturned() const { return returnStatus_; }
 
 void IssueRecords::setReturned(bool r) { returnStatus_ = r; }
 string IssueRecords::toCSV() const { return to_string(memberID_) + "," + to_string(bookID_) + "," + dateOfIssue_ + "," + (returnStatus_ ? "Yes" : "No"); }
+void IssueRecords::writeToFile(ofstream &outFile) const
+{
+    if (outFile.is_open())
+        outFile << toCSV() << endl;
+}

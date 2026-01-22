@@ -30,6 +30,7 @@ public:
     void setReturned(bool r);
     bool setDateOfIssue(const string &d);
     string toCSV() const;
+    void writeToFile(ofstream &outFile) const;
     ~IssueRecords();
 };
 #endif
