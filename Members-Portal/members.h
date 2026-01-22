@@ -43,6 +43,7 @@ public:
     LibraryMember &operator=(const LibraryMember &rhs);
     int getMemberID() const;
     int getNumberOfBooksBorrowed() const;
+    virtual int getBorrowLimit() const = 0;
     string getMembershipDate() const;
     void setMemberID(int i);
     void setNumberOfBooksBorrowed(int b);
@@ -65,6 +66,7 @@ public:
     Student(const Student &rhs);
     Student &operator=(const Student &rhs);
     double calculateFine(int days) const override;
+    int getBorrowLimit() const override;
     void displayDetails() const override;
     bool hasDegree(const string &d) const;
     string toCSV() const override;
@@ -84,5 +86,6 @@ public:
     bool isFromDept(const string &dept) const;
     void displayDetails() const override;
     string toCSV() const override;
+    int getBorrowLimit() const override;
 };
 #endif
