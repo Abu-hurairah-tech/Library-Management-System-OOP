@@ -345,3 +345,25 @@ void BooksManager::updateBook()
     saveBooks();
     cout << "Book updated successfully.\n";
 }
+
+void BooksManager::displayBooks() const
+{
+    if (books.empty())
+    {
+        cout << "No books available.\n";
+        return;
+    }
+
+    cout << left << setw(10) << "ID"
+         << setw(25) << "Title"
+         << setw(20) << "Author"
+         << setw(10) << "Copies" << endl;
+
+    for (const auto &b : books)
+    {
+        cout << left << setw(10) << b.getID()
+             << setw(25) << b.getTitle()
+             << setw(20) << b.getAuthor()
+             << setw(10) << b.getCopies() << endl;
+    }
+}
