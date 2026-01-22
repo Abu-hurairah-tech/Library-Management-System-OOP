@@ -35,6 +35,9 @@ public:
     void setReturned(bool r);
     bool setDateOfReturn(const string &d);
     void setFine(double f);
+    int getDaysOverdue(const string &returnDate) const;
+    bool isOverdue(const string &returnDate) const;
+    string calculateDueDate(int allowedDays) const;
     string toCSV() const;
     void writeToFile(ofstream &outFile) const;
     ~IssueRecords();

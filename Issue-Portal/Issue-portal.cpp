@@ -12,6 +12,67 @@
 #include <algorithm>
 using namespace std;
 
+static int dateToDays(const string &date)
+{
+    int day = stoi(date.substr(0, 2));
+    int month = stoi(date.substr(3, 2));
+    int year = stoi(date.substr(6, 4));
+
+    static int daysInMonth[] =
+        {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    int totalDays = year * 365 + day;
+
+    for (int i = 0; i < month - 1; i++)
+        totalDays += daysInMonth[i];
+
+    return totalDays;
+}
+
+int IssueRecords::getDaysOverdue(const string &dueDate) const
+{
+    if (!returnStatus_)
+        return 0;
+
+    int overdue =
+        dateToDays(dateOfReturn_) - dateToDays(dueDate);
+
+    return overdue > 0 ? overdue : 0;
+}
+
+bool IssueRecords::isOverdue(const string &dueDate) const
+{
+    if (!returnStatus_)
+        return false;
+
+    return dateToDays(dateOfReturn_) > dateToDays(dueDate);
+}
+
+string IssueRecords::calculateDueDate(int allowedDays) const
+{
+    int issueDays = dateToDays(dateOfIssue_);
+    int dueDays = issueDays + allowedDays;
+
+    int year = dueDays / 365;
+    int remaining = dueDays % 365;
+
+    static int daysInMonth[] =
+        {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    int month = 0;
+    while (remaining > daysInMonth[month])
+    {
+        remaining -= daysInMonth[month];
+        month++;
+    }
+
+    int day = remaining;
+
+    return (day < 10 ? "0" : "") + to_string(day) + " " +
+           (month + 1 < 10 ? "0" : "") + to_string(month + 1) + " " +
+           to_string(year);
+}
+
 static bool checkDate(const string &date)
 {
     // Must be exactly "DD MM YYYY" → 10 characters
