@@ -18,17 +18,23 @@ private:
     int memberID_;
     int bookID_;
     string dateOfIssue_;
+    string dateOfReturn_;
     bool returnStatus_;
+    double fine_;
 
 public:
-    IssueRecords(int mid = 0, int bid = 0, const string &doi = "", bool returned = false);
+    IssueRecords();
+    IssueRecords(int mid = 0, int bid = 0, const string &doi = "", const string &dor = "", bool returned = false, double f = 0.0);
     int getMemberID() const;
     int getBookID() const;
     string getDateOfIssue() const;
+    string getDateOfReturn() const;
+    double getFine();
     bool isReturned() const;
 
     void setReturned(bool r);
-    bool setDateOfIssue(const string &d);
+    bool setDateOfReturn(const string &d);
+    void setFine(double f);
     string toCSV() const;
     void writeToFile(ofstream &outFile) const;
     ~IssueRecords();

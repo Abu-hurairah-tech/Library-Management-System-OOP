@@ -46,25 +46,33 @@ static bool checkDate(const string &date)
     return true;
 }
 
-IssueRecords::IssueRecords(int mid, int bid, const string &doi, bool returned) : memberID_(mid), bookID_(bid), dateOfIssue_(doi), returnStatus_(returned) {}
+IssueRecords::IssueRecords(): memberID_(0), bookID_(0),returnStatus_(false), fine_(0.0) {}
+IssueRecords::IssueRecords(int mid, int bid, const string &doi, const string &dor, bool returned, double f) : memberID_(mid), bookID_(bid), dateOfIssue_(doi), dateOfReturn_(dor), returnStatus_(returned), fine_(f) {}
 IssueRecords ::~IssueRecords() {}
 int IssueRecords::getMemberID() const { return memberID_; }
 int IssueRecords::getBookID() const { return bookID_; }
 string IssueRecords::getDateOfIssue() const { return dateOfIssue_; }
-bool IssueRecords::setDateOfIssue(const string& d)
+double IssueRecords::getFine() { return fine_; }
+string IssueRecords::getDateOfReturn() const { return dateOfReturn_; }
+bool IssueRecords::isReturned() const { return returnStatus_; }
+
+bool IssueRecords::setDateOfReturn(const string &d)
 {
     if (checkDate(d))
     {
-        dateOfIssue_ = d;
+        dateOfReturn_ = d;
         return true;
     }
     else
         return false;
 }
-bool IssueRecords::isReturned() const { return returnStatus_; }
 
+void IssueRecords::setFine(double f)
+{
+    fine_ = f < 0 ? 0 : f;
+}
 void IssueRecords::setReturned(bool r) { returnStatus_ = r; }
-string IssueRecords::toCSV() const { return to_string(memberID_) + "," + to_string(bookID_) + "," + dateOfIssue_ + "," + (returnStatus_ ? "Yes" : "No"); }
+string IssueRecords::toCSV() const { return to_string(memberID_) + "," + to_string(bookID_) + "," + dateOfIssue_ + "," + dateOfReturn_ + "," + (returnStatus_ ? "Yes" : "No") + "," + to_string(fine_); }
 void IssueRecords::writeToFile(ofstream &outFile) const
 {
     if (outFile.is_open())
