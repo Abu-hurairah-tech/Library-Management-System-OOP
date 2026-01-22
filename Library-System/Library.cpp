@@ -3,6 +3,7 @@
 #include "Library.h"
 #include "Library-Books-Management.h"
 #include "Library-Member-Management.h"
+#include "DateUtils.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,40 +12,6 @@
 #include <fstream>
 #include <algorithm>
 using namespace std;
-
-bool checkDate(const string &date)
-{
-    // Must be exactly "DD MM YYYY" → 10 characters
-    if (date.length() != 10)
-        return false;
-
-    // Check spaces
-    if (date[2] != ' ' || date[5] != ' ')
-        return false;
-
-    // Check digits
-    for (int i = 0; i < 10; i++)
-    {
-        if (i == 2 || i == 5)
-            continue;
-        if (!isdigit(date[i]))
-            return false;
-    }
-
-    int day = stoi(date.substr(0, 2));
-    int month = stoi(date.substr(3, 2));
-    int year = stoi(date.substr(6, 4));
-
-    // Basic range checks
-    if (day < 1 || day > 31)
-        return false;
-    if (month < 1 || month > 12)
-        return false;
-    if (year < 1000)
-        return false;
-
-    return true;
-}
 
 Library::Library() {}
 Library::~Library() {}
@@ -58,22 +25,28 @@ void Library::loadIssuedBooks()
     getline(inputFile, line);
     while (getline(inputFile, line))
     {
+        if (line.empty())
+            continue;
         stringstream ss(line);
-        string mid, bid, returned, doi;
+        string mid, bid, returned, doi, dor, f;
 
         getline(ss, mid, ',');
         getline(ss, bid, ',');
         getline(ss, doi, ',');
-        getline(ss, returned);
+        getline(ss, dor, ',');
+        getline(ss, returned, ',');
+        getline(ss, f);
 
         int id = mid.empty() ? 0 : stoi(mid);
         int bookid = bid.empty() ? 0 : stoi(bid);
-        bool returnStat = returned.empty() ? true : false;
+        bool returnStat = (returned == "Yes" || returned == "yes");
+
+        double fine = f.empty() ? 0 : stod(f);
 
         if (!mid.empty() && !bid.empty())
         {
-            IssueRecords i(id, bookid, doi, returnStat);
-            issuedBooks.push_back(i);
+            IssueRecords record(id, bookid, doi, dor, returnStat, fine);
+            issuedBooks.push_back(record);
         }
     }
     inputFile.close();
@@ -85,7 +58,7 @@ void Library::saveIssuedBooks()
     if (!outputFile)
         return;
 
-    outputFile << "Member ID,Book ID,Date Of Issue,Return Status" << endl;
+    outputFile << "Member ID,Book ID,Date Of Issue,Date Of Return,Return Status,Fine" << endl;
     for (auto &i : issuedBooks)
     {
         i.writeToFile(outputFile);
@@ -151,7 +124,7 @@ void Library::issueBook()
     member->setNumberOfBooksBorrowed(member->getNumberOfBooksBorrowed() + 1);
 
     // Create issue record
-    IssueRecords issue(member->getMemberID(), book->getID(), date, false);
+    IssueRecords issue(member->getMemberID(), book->getID(), date);
     issuedBooks.push_back(issue);
 
     // Save all changes
@@ -160,4 +133,57 @@ void Library::issueBook()
     saveIssuedBooks();
 
     cout << "Transaction Successful! Book Issued to Member " << member->getName() << endl;
+}
+
+void Library::returnBooks()
+{
+    LibraryMember *member = membersMgr.searchMember();
+    if (!member)
+        return;
+
+    Book *book = booksMgr.searchByID();
+    if (!book)
+        return;
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (auto &record : issuedBooks)
+    {
+        if (record.getMemberID() == member->getMemberID() && record.getBookID() == book->getID() && !record.isReturned())
+        {
+
+            string returnDate;
+            cout << "Enter Return Date (DD MM YYYY): ";
+            while (true)
+            {
+                getline(cin, returnDate);
+                if (checkDate(returnDate))
+                    break;
+                cout << "Invalid Date! Try Again: ";
+            }
+
+            record.setDateOfReturn(returnDate);
+            record.setReturned(true);
+
+            string dueDate = record.calculateDueDate(member->getAllowedDays());
+            int overdue = record.getDaysOverdue(dueDate);
+            double fine = member->calculateFine(overdue);
+            record.setFine(fine);
+
+            book->setCopies(book->getCopies() + 1);
+            member->setNumberOfBooksBorrowed(member->getNumberOfBooksBorrowed() - 1);
+
+            booksMgr.saveBooks();
+            membersMgr.saveMembers();
+            saveIssuedBooks();
+
+            cout << "Book Returned Successfully!" << endl;
+            if (fine > 0)
+            {
+                cout << "Fine: Rs " << fine << endl;
+            }
+            return;
+        }
+    }
+    cout << "No active issue record found for this book and member! " << endl;
 }
