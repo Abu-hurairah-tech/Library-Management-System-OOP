@@ -273,3 +273,23 @@ void MemberManager::removeMember()
     cout << "Error: Member ID " << id << " not found.\n";
     return;
 }
+
+void MemberManager::displayMembers() const
+{
+    if (members.empty())
+    {
+        cout << "No members registered.\n";
+        return;
+    }
+
+    cout << left << setw(10) << "ID"
+         << setw(25) << "Name"
+         << setw(10) << "Borrowed" << endl;
+
+    for (const auto &m : members)
+    {
+        cout << left << setw(10) << m->getMemberID()
+             << setw(25) << m->getName()
+             << setw(10) << m->getNumberOfBooksBorrowed() << endl;
+    }
+}
