@@ -143,7 +143,7 @@ int main()
     library.loadIssuedBooks();
 
     int loginChoice;
-
+    system("color F0");
     system("cls");
     cout << "\n"
          << string(54, '=');
@@ -219,15 +219,19 @@ int main()
         switch (choice)
         {
         case 1:
+            system("cls");
             booksMenu(library);
             break;
         case 2:
+            system("cls");
             membersMenu(library);
             break;
         case 3:
+            system("cls");
             library.issueBook();
             break;
         case 4:
+            system("cls");
             library.returnBooks();
             break;
         case 0:
