@@ -2,6 +2,7 @@
 #include "Login-Portal/login.h"
 #include "Library-System/Library.h"
 #include "Utilities\DateUtils.h"
+#include <cstdlib>
 #include <limits>
 
 using namespace std;
@@ -143,6 +144,7 @@ int main()
 
     int loginChoice;
 
+    system("cls");
     cout << "\n"
          << string(54, '=');
     cout << "LIBRARY MANAGEMENT SYSTEM";
