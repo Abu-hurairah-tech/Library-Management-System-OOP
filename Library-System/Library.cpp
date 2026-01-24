@@ -121,7 +121,7 @@ void Library::issueBook()
     } while (!validDate);
 
     // Update book copies and status
-    book->setCopies(book->getCopies() - 1);
+    book->decrementCopies();
 
     // Update member borrow count
     member->setNumberOfBooksBorrowed(member->getNumberOfBooksBorrowed() + 1);
@@ -173,7 +173,7 @@ void Library::returnBooks()
             double fine = member->calculateFine(overdue);
             record.setFine(fine);
 
-            book->setCopies(book->getCopies() + 1);
+            book->incrementCopies();
             member->setNumberOfBooksBorrowed(member->getNumberOfBooksBorrowed() - 1);
 
             booksMgr.saveBooks();

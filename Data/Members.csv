@@ -1,5 +1,51 @@
 Type,ID,Name,Email,Phone,MemberShip Date,Books Borrowed,Degree/Dept
-Student,3,haii,a@.com,923338080242,12 02 2026,0,IT
-Student,4,hii,a@.com,933338080242,07 08 2015,0,CS
-Student,1084,hell,a@.com,923338080242,12 02 2024,2,IT
-Faculty,89,hi,jo@.com,923338080242,12 12 2023,0,CS
+Student,4,Alice Johnson,alice.j@example.com,923001234567,15 01 2026,0,Computer Science
+Student,5,Bob Smith,bob.s@example.com,923002345678,16 01 2026,0,Software Engineering
+Faculty,6,Dr. Sarah Khan,s.khan@univ.edu,923003456789,10 12 2025,1,Mathematics
+Student,7,Charlie Davis,char.d@example.com,923004567890,18 01 2026,1,IT
+Student,8,Diana Prince,diana.p@example.com,923005678901,20 01 2026,0,Cyber Security
+Faculty,9,Prof. Ahmed Ali,a.ali@univ.edu,923006789012,05 11 2025,2,Physics
+Student,10,Ethan Hunt,ethan.h@example.com,923007890123,22 01 2026,0,Mechanical
+Student,11,Fiona Gallagher,fiona.g@example.com,923008901234,23 01 2026,0,Civil Engineering
+Student,12,George Miller,geo.m@example.com,923009012345,25 01 2026,1,Data Science
+Faculty,13,Dr. Emily White,e.white@univ.edu,923001122334,14 10 2025,0,Chemistry
+Student,14,Hannah Abbott,h.abbot@example.com,923002233445,28 01 2026,0,IT
+Student,15,Ian Wright,ian.w@example.com,923003344556,01 02 2026,0,Electrical
+Student,16,Julia Roberts,j.rob@example.com,923004455667,02 02 2026,0,AI
+Faculty,17,Mr. James Bond,j.bond@univ.edu,923005566778,12 09 2025,1,Intelligence Studies
+Student,18,Kevin Hart,k.hart@example.com,923006677889,05 02 2026,0,Marketing
+Student,19,Laura Palmer,l.palmer@example.com,923007788990,06 02 2026,0,Psychology
+Student,20,Mike Ross,m.ross@example.com,923008899001,08 02 2026,2,Law
+Faculty,21,Dr. Gregory House,g.house@univ.edu,923009900112,01 08 2025,0,Medicine
+Student,22,Nina Simone,n.simone@example.com,923001010101,10 02 2026,0,Music
+Student,23,Oscar Isaac,o.isaac@example.com,923002020202,12 02 2026,0,Drama
+Student,24,Peter Parker,p.parker@example.com,923003030303,14 02 2026,1,Photography
+Faculty,25,Aunt May,a.may@univ.edu,923004040404,15 07 2025,0,Sociology
+Student,26,Quinn Fabray,q.fab@example.com,923005050505,16 02 2026,0,Arts
+Student,27,Riley Reid,r.reid@example.com,923006060606,18 02 2026,0,History
+Student,28,Steve Rogers,s.rogers@example.com,923007070707,20 02 2026,0,Political Science
+Faculty,29,Dr. Bruce Banner,b.banner@univ.edu,923008080808,10 06 2025,3,Biology
+Student,30,Tony Stark,t.stark@example.com,923009090909,22 02 2026,0,Aerospace
+Student,31,Ursula Corbero,u.cor@example.com,923001212121,24 02 2026,0,Banking
+Student,32,Victor Stone,v.stone@example.com,923002323232,25 02 2026,1,Robotics
+Faculty,33,Dr. Victor Von Doom,v.doom@univ.edu,923003434343,05 05 2025,0,Political Science
+Student,34,Wanda Maximoff,w.max@example.com,923004545454,26 02 2026,0,Philosophy
+Student,35,Xander Harris,x.har@example.com,923005656565,28 02 2026,0,Architecture
+Student,36,Yara Shahidi,y.shah@example.com,923006767676,01 03 2026,0,Social Work
+Faculty,37,Prof. Charles Xavier,c.xav@univ.edu,923007878787,20 04 2025,2,Genetics
+Student,38,Zane Malik,z.mal@example.com,923008989898,03 03 2026,0,Music
+Student,39,Arthur Curry,a.curry@example.com,923009090123,05 03 2026,0,Marine Biology
+Student,40,Barry Allen,b.allen@example.com,923001112223,07 03 2026,0,Forensics
+Faculty,41,Iris West,i.west@univ.edu,923002223334,15 03 2025,0,Journalism
+Student,42,Clark Kent,c.kent@example.com,923003334445,10 03 2026,1,Journalism
+Student,43,Bruce Wayne,b.wayne@example.com,923004445556,12 03 2026,0,Business
+Student,44,Selina Kyle,s.kyle@example.com,923005556667,14 03 2026,0,Criminology
+Faculty,45,Alfred Pennyworth,a.pen@univ.edu,923006667778,01 02 2025,0,Management
+Student,46,Oliver Queen,o.queen@example.com,923007778889,16 03 2026,0,Economics
+Student,47,Felicity Smoak,f.smoak@example.com,923008889990,18 03 2026,0,IT
+Student,48,John Diggle,j.dig@example.com,923009990001,20 03 2026,0,Security
+Faculty,49,Dr. Harrison Wells,h.wells@univ.edu,923001020304,10 01 2025,1,Quantum Physics
+Student,50,Caitlin Snow,c.snow@example.com,923002030405,22 03 2026,0,Bio-Chemistry
+Student,51,Cisco Ramon,c.ram@example.com,923003040506,24 03 2026,0,Engineering
+Student,52,Ralph Dibny,r.dib@example.com,923004050607,26 03 2026,0,Investigation
+Faculty,53,Joe West,j.west@univ.edu,923005060708,01 01 2025,0,Criminal Justice

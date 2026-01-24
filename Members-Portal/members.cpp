@@ -84,27 +84,6 @@ void LibraryMember::writeToFile(ofstream &outFile) const
         outFile << toCSV() << endl;
 }
 
-void LibraryMember::displayDetails() const
-{
-    cout << "==================== Member Details ====================" << endl;
-
-    cout << left
-         << setw(5) << "Member ID" << "| "
-         << setw(20) << "Name" << "| "
-         << setw(20) << "Email" << "| "
-         << setw(20) << "Phone" << "| "
-         << setw(20) << "Number Of Books Borrowed" << "| "
-         << endl;
-
-    cout << string(65, '-') << endl;
-
-    cout << left
-         << setw(5) << memberID_ << "| "
-         << setw(20) << name_ << "| "
-         << setw(20) << email_ << "| "
-         << setw(20) << phone_ << "| "
-         << setw(20) << booksBorrowed_ << "| " << endl;
-}
 
 Student::Student(const string &n, const string &e, const string &p, int i, int b, const string &md, const string &d) : LibraryMember(n, e, p, i, b, md), degree_(d) {}
 Student::~Student() {}
@@ -128,8 +107,31 @@ int Student::getBorrowLimit() const { return 3; }
 string Student::toCSV() const { return "Student," + LibraryMember::toCSV() + "," + degree_; }
 void Student::displayDetails() const
 {
-    LibraryMember::displayDetails();
-    cout << "Degree: " << degree_ << endl;
+    cout << string(58, '=');
+    cout << "Member Details";
+    cout << string(58, '=') << endl;
+
+    cout
+        << left
+        << setw(10) << "Member ID" << "| "
+        << setw(20) << "Name" << "| "
+        << setw(20) << "Email" << "| "
+        << setw(20) << "Phone" << "| "
+        << setw(22) << "No. Of Books Borrowed" << "| "
+        << setw(20) << "Degree/Department" << "| "
+        << endl;
+
+    cout << string(123, '-') << endl;
+
+        cout << left
+             << setw(10) << memberID_ << "| "
+             << setw(20) << name_ << "| "
+             << setw(20) << email_ << "| "
+             << setw(20) << phone_ << "| "
+             << setw(22) << booksBorrowed_ << "| "
+             << setw(20) << degree_ << "| "
+             << endl;
+    
 }
 
 Faculty::Faculty(const string &n, const string &e, const string &p, int i, int b, const string &md, const string &dept) : LibraryMember(n, e, p, i, b, md), department_(dept) {}
@@ -155,25 +157,28 @@ string Faculty::toCSV() const { return "Faculty," + LibraryMember::toCSV() + ","
 
 void Faculty::displayDetails() const
 {
-    LibraryMember::displayDetails();
-    cout << "================================================ Member Details ================================================" << endl;
+    cout << string(58, '=');
+    cout << "Member Details";
+    cout << string(58, '=') << endl;
+
+    cout
+        << left
+        << setw(10) << "Member ID" << "| "
+        << setw(20) << "Name" << "| "
+        << setw(20) << "Email" << "| "
+        << setw(20) << "Phone" << "| "
+        << setw(22) << "No. Of Books Borrowed" << "| "
+        << setw(20) << "Degree/Department" << "| "
+        << endl;
+
+    cout << string(123, '-') << endl;
 
     cout << left
-         << setw(20) << "Member ID" << "| "
-         << setw(20) << "Name" << "| "
-         << setw(20) << "Email" << "| "
-         << setw(20) << "Phone" << "| "
-         << setw(20) << "Number Of Books Borrowed" << "| "
-         << endl;
-
-    cout << string(113, '-') << endl;
-
-    cout << left
-         << setw(20) << memberID_ << "| "
+         << setw(10) << memberID_ << "| "
          << setw(20) << name_ << "| "
          << setw(20) << email_ << "| "
          << setw(20) << phone_ << "| "
-         << setw(20) << booksBorrowed_ << "| " << endl;
-
-    cout << "Department: " << department_ << endl;
+         << setw(22) << booksBorrowed_ << "| "
+         << setw(20) << department_ << "| "
+         << endl;
 }

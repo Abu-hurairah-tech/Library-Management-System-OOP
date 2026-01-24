@@ -350,7 +350,6 @@ void MemberManager::updateMember()
             continue;
         }
 
-        // ✅ valid input
         m->setNumberOfBooksBorrowed(borrowed);
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         break;
@@ -377,18 +376,21 @@ void MemberManager::displayMembers()
         return;
     }
 
-    cout << "================================================ Member Details ================================================" << endl;
+    cout << string(58, '=');
+    cout << "Member Details";
+    cout << string(58, '=') << endl;
+    
+    cout
+        << left
+        << setw(10) << "Member ID" << "| "
+        << setw(20) << "Name" << "| "
+        << setw(20) << "Email" << "| "
+        << setw(20) << "Phone" << "| "
+        << setw(22) << "No. Of Books Borrowed" << "| "
+        << setw(20) << "Degree/Department" << "| "
+        << endl;
 
-    cout << left
-         << setw(20) << "Member ID" << "| "
-         << setw(20) << "Name" << "| "
-         << setw(20) << "Email" << "| "
-         << setw(20) << "Phone" << "| "
-         << setw(25) << "Number Of Books Borrowed" << "| "
-         << setw(20) << "Degree/Department" << "| "
-         << endl;
-
-    cout << string(113, '-') << endl;
+    cout << string(123, '-') << endl;
 
     for (const auto &m : members)
     {
@@ -396,11 +398,11 @@ void MemberManager::displayMembers()
             continue;
 
         cout << left
-             << setw(20) << m->getMemberID() << "| "
+             << setw(10) << m->getMemberID() << "| "
              << setw(20) << m->getName() << "| "
              << setw(20) << m->getEmail() << "| "
              << setw(20) << m->getPhone() << "| "
-             << setw(25) << m->getNumberOfBooksBorrowed() << "| "
+             << setw(22) << m->getNumberOfBooksBorrowed() << "| "
              << setw(20) << m->getExtra() << "| "
              << endl;
     }

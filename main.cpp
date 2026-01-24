@@ -12,7 +12,10 @@ void booksMenu(Library &library)
 
     while (true)
     {
-        cout << "\n----- BOOKS MANAGEMENT -----\n";
+        cout << "\n"
+             << string(58, '=');
+        cout << "BOOKS MANAGEMENT";
+        cout << string(58, '=') << endl;
         cout << "1. Add Book\n";
         cout << "2. Remove Book\n";
         cout << "3. Search Book\n";
@@ -32,7 +35,10 @@ void booksMenu(Library &library)
             break;
         case 3:
         {
-            cout << "\n--- Search By ---\n";
+            cout << "\n"
+                 << string(58, '-');
+            cout << "Search By";
+            cout << string(58, '-') << endl;
             cout << "1. ID\n2. Title\n3. Author\n4. ISBN\n0. Cancel\n";
             cout << "Enter choice: ";
             int sChoice = getValidInteger();
@@ -75,12 +81,16 @@ void membersMenu(Library &library)
     int choice;
     while (true)
     {
-        cout << "\n----- MEMBERS MANAGEMENT -----\n";
+        cout << "\n"
+             << string(57, '=');
+        cout << "MEMBERS MANAGEMENT";
+        cout << string(57, '=') << endl;
         cout << "1. Add Member\n";
         cout << "2. Remove Member\n";
         cout << "3. Update Member\n";
-        cout << "4. View Members\n";
-        cout << "5. Show Member History\n";
+        cout << "4. Search Member\n";
+        cout << "5. View Members\n";
+        cout << "6. Show Member History\n";
         cout << "0. Back\n";
         cout << "Enter choice: ";
 
@@ -97,10 +107,24 @@ void membersMenu(Library &library)
         case 3:
             library.getMemberManager().updateMember();
             break;
-        case 4:
+            case 4:
+            {
+                LibraryMember *m = library.getMemberManager().searchMember();
+                if (m)
+                {
+                    cout << "\n===== MEMBER FOUND =====\n";
+                    m->displayDetails(); // polymorphic call
+                }
+                else
+                {
+                    cout << "Member not found.\n";
+                }
+                break;
+            }
+        case 5:
             library.getMemberManager().displayMembers();
             break;
-        case 5:
+        case 6:
             library.showMemberHistory();
             break;
         case 0:
@@ -119,9 +143,10 @@ int main()
 
     int loginChoice;
 
-    cout << "=============================\n";
-    cout << "  LIBRARY MANAGEMENT SYSTEM  \n";
-    cout << "=============================\n";
+    cout << "\n"
+         << string(54, '=');
+    cout << "LIBRARY MANAGEMENT SYSTEM";
+    cout << string(54, '=') << endl;
 
     // ---------- LOGIN FLOW ----------
     int loginAttempts = 0; // Track failed attempts
@@ -175,7 +200,10 @@ int main()
 
     while (true)
     {
-        cout << "\n=========== MAIN MENU ==========\n";
+        cout << "\n"
+             << string(62, '=');
+        cout << "MAIN MENU";
+        cout << string(62, '=') << endl;
         cout << "1. Books Management\n";
         cout << "2. Members Management\n";
         cout << "3. Issue Book\n";
@@ -201,7 +229,7 @@ int main()
             library.returnBooks();
             break;
         case 0:
-            cout << "Thank you for using the system.\n";
+            cout << "\t\t\t\t\t\tThank you for using the system.\n";
             return 0;
         default:
             cout << "Invalid option!\n";

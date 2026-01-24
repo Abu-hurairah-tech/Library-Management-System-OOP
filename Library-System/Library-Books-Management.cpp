@@ -254,24 +254,27 @@ void BooksManager::searchByAuthor()
 
     bool found = false;
 
-    cout << "\n==================Matching Books:==================\n";
-    cout << left << setw(10) << "ID"
-         << setw(25) << "Title"
-         << setw(25) << "Author"
-         << setw(15) << "ISBN"
+    cout << "\n"
+         << string(58, '=');
+    cout << "Matching Books";
+    cout << string(58, '=') << endl;
+    cout << left << setw(10) << "ID" << "| "
+         << setw(25) << "Title" << "| "
+         << setw(25) << "Author" << "| "
+         << setw(15) << "ISBN" << "| "
          << endl;
 
-    cout << string(75, '-') << endl;
+    cout << string(123, '-') << endl;
 
     for (const auto &b : books)
     {
         if (b.getAuthor() == author)
         {
             found = true;
-            cout << left << setw(10) << b.getID()
-                 << setw(25) << b.getTitle()
-                 << setw(25) << b.getAuthor()
-                 << setw(15) << b.getISBN()
+            cout << left << setw(10) << b.getID() << "| "
+                 << setw(25) << b.getTitle() << "| "
+                 << setw(25) << b.getAuthor() << "| "
+                 << setw(15) << b.getISBN() << "| "
                  << endl;
         }
     }

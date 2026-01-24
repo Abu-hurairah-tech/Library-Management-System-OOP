@@ -1,5 +1,51 @@
 ID,Title,Author,ISBN,Status,Copies
-89,hii,ydguq,1234567890,Available,9
-990,whc,tequi,1234567891,Available,1
-800,hello,tequi,1234567892,Available,1
-1,hii,iuegf,1234567893,Available,2
+90,The Great Gatsby,F. Scott Fitzgerald,1112223334,Available,5
+91,To Kill a Mockingbird,Harper Lee,2223334445,Available,3
+92,1984,George Orwell,3334445556,Unavailable,0
+93,Brave New World,Aldous Huxley,4445556667,Available,7
+94,The Catcher in the Rye,J.D. Salinger,5556667778,Available,4
+95,The Hobbit,J.R.R. Tolkien,6667778889,Available,12
+96,Fahrenheit 451,Ray Bradbury,7778889990,Available,6
+97,Animal Farm,George Orwell,8889990001,Available,8
+98,Pride and Prejudice,Jane Austen,9990001112,Available,5
+99,The Odyssey,Homer,1212121212,Available,3
+100,The Divine Comedy,Dante Alighieri,2323232323,Available,4
+101,Crime and Punishment,Fyodor Dostoevsky,3434343434,Available,6
+102,The Brothers Karamazov,Fyodor Dostoevsky,4545454545,Available,2
+103,Moby Dick,Herman Melville,5656565656,Available,4
+104,War and Peace,Leo Tolstoy,6767676767,Available,3
+105,Ulysses,James Joyce,7878787878,Available,2
+106,The Iliad,Homer,8989898989,Available,5
+107,Hamlet,William Shakespeare,9090909090,Available,15
+108,Macbeth,William Shakespeare,1010101010,Available,10
+109,One Hundred Years of Solitude,Gabriel Garcia Marquez,2121212121,Available,6
+110,The Sound and the Fury,William Faulkner,3232323232,Available,4
+111,Invisible Man,Ralph Ellison,4343434343,Available,5
+112,The Grapes of Wrath,John Steinbeck,5454545454,Available,7
+113,Lolita,Vladimir Nabokov,6565656565,Available,3
+114,The Alchemist,Paulo Coelho,7676767676,Available,20
+115,The Stranger,Albert Camus,8787878787,Available,9
+116,Catch-22,Joseph Heller,9898989898,Available,5
+117,Slaughterhouse-Five,Kurt Vonnegut,1313131313,Available,4
+118,The Handmaid's Tale,Margaret Atwood,2424242424,Available,8
+119,The Road,Cormac McCarthy,3535353535,Available,6
+120,Beloved,Toni Morrison,4646464646,Available,5
+121,A Passage to India,E.M. Forster,5757575757,Available,4
+122,Things Fall Apart,Chinua Achebe,6868686868,Available,7
+123,The Old Man and the Sea,Ernest Hemingway,7979797979,Available,11
+124,Mrs. Dalloway,Virginia Woolf,8080808080,Available,3
+125,The Picture of Dorian Gray,Oscar Wilde,9191919191,Available,6
+126,Jane Eyre,Charlotte Bronte,1414141414,Available,5
+127,Wuthering Heights,Emily Bronte,2525252525,Available,4
+128,Frankenstein,Mary Shelley,3636363636,Available,9
+129,Dracula,Bram Stoker,4747474747,Available,7
+130,Les Miserables,Victor Hugo,5858585858,Available,5
+131,The Trial,Franz Kafka,6969696969,Available,4
+132,The Metamorphosis,Franz Kafka,7070707070,Available,8
+133,Heart of Darkness,Joseph Conrad,8181818181,Available,5
+134,A Clockwork Orange,Anthony Burgess,9292929292,Available,6
+135,Lord of the Flies,William Golding,1515151515,Available,7
+136,Dune,Frank Herbert,2626262626,Available,10
+137,The Shining,Stephen King,3737373737,Available,8
+138,The Da Vinci Code,Dan Brown,4848484848,Available,15
+139,Harry Potter and the Sorcerer's Stone,J.K. Rowling,5959595959,Available,25

@@ -56,7 +56,6 @@ public:
     bool operator==(int i) const;
     virtual string toCSV() const;
     void writeToFile(ofstream &outFile) const;
-    virtual void displayDetails() const override;
 };
 
 class Student : public LibraryMember

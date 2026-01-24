@@ -17,7 +17,7 @@ string Book::getISBN() const { return ISBN_; }
 void Book::setID(int i) { id_ = i; }
 void Book::setTitle(const string &t) { title_ = t; }
 void Book::setAuthor(const string &a) { author_ = a; }
-void Book::setISBN(const string& isbn) { ISBN_ = isbn; }
+void Book::setISBN(const string &isbn) { ISBN_ = isbn; }
 string Book::getStatus() const { return status_; }
 void Book::setStatus(const string &status) { status_ = status; }
 bool Book::operator==(int id) const { return this->id_ == id; }
@@ -62,7 +62,14 @@ void Book::setCopies(int c)
     if (c >= 0)
         copies_ = c;
 }
-void Book::incrementCopies() { copies_++; }
+void Book::incrementCopies()
+{
+    copies_++;
+    if(copies_ > 0)
+    {
+        status_ = "Available";
+    }
+}
 void Book::decrementCopies()
 {
     if (copies_ > 0)
