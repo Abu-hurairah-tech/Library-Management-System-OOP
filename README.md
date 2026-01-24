@@ -141,6 +141,6 @@ Compile using provided Makefile
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
 - Inspired by real-world University Library Systems
-  T- hanks to C++ STL documentation
+-  Thanks to C++ STL documentation
 - Academic guidance and OOP best practices
 - Open-source documentation templates
