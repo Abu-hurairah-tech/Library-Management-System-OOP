@@ -4,19 +4,20 @@
 #include <vector>
 #include <iomanip>
 #include <fstream>
+#include <limits>
 #include <algorithm>
 using namespace std;
 static constexpr double STUDENT_FINE_RATE = 100.0;
 static constexpr double FACULTY_FINE_RATE = 50.0;
 
 Person::Person() : name_(""), email_(""), phone_(0) {}
-Person::Person(const string &n, const string &e, int p) : name_(n), email_(e), phone_(p > 0 ? p : 0) {}
+Person::Person(const string &n, const string &e, const string &p) : name_(n), email_(e), phone_(p) {}
 string Person::getName() const { return name_; }
 string Person::getEmail() const { return email_; }
-int Person::getPhone() const { return phone_; }
+string Person::getPhone() const { return phone_; }
 void Person::setName(string n) { name_ = n; }
 void Person::setEmail(string e) { email_ = e; }
-void Person::setPhone(int p) { phone_ = p; }
+void Person::setPhone(const string &p) { phone_ = p; }
 Person::Person(const Person &rhs)
 {
     this->name_ = rhs.name_;
@@ -35,7 +36,7 @@ Person &Person::operator=(const Person &rhs)
 }
 Person::~Person() {}
 
-LibraryMember::LibraryMember(const string &n, const string &e, int p, int i, int b, const string &md) : Person(n, e, p), memberID_(i > 0 ? i : 0), booksBorrowed_(b >= 0 ? b : 0), membershipDate_(md) {}
+LibraryMember::LibraryMember(const string &n, const string &e, const string &p, int i, int b, const string &md) : Person(n, e, p), memberID_(i > 0 ? i : 0), booksBorrowed_(b >= 0 ? b : 0), membershipDate_(md) {}
 LibraryMember::~LibraryMember() {}
 LibraryMember::LibraryMember(const LibraryMember &rhs) : Person(rhs)
 {
@@ -75,7 +76,7 @@ void LibraryMember::setMembershipDate(const string &md)
 double LibraryMember::calculateFine(int days) const { return days * 100.0; }
 bool LibraryMember::operator==(int i) const { return memberID_ == i; }
 
-string LibraryMember::toCSV() const { return to_string(memberID_) + "," + name_ + "," + email_ + "," + to_string(phone_) + "," + membershipDate_ + "," + to_string(booksBorrowed_); }
+string LibraryMember::toCSV() const { return to_string(memberID_) + "," + name_ + "," + email_ + "," + phone_ + "," + membershipDate_ + "," + to_string(booksBorrowed_); }
 
 void LibraryMember::writeToFile(ofstream &outFile) const
 {
@@ -105,7 +106,7 @@ void LibraryMember::displayDetails() const
          << setw(20) << booksBorrowed_ << "| " << endl;
 }
 
-Student::Student(const string &n, const string &e, int p, int i, int b, const string &md, const string &d) : LibraryMember(n, e, p, i, b, md), degree_(d) {}
+Student::Student(const string &n, const string &e, const string &p, int i, int b, const string &md, const string &d) : LibraryMember(n, e, p, i, b, md), degree_(d) {}
 Student::~Student() {}
 Student::Student(const Student &rhs) : LibraryMember(rhs), degree_(rhs.degree_) {}
 Student &Student::operator=(const Student &rhs)
@@ -120,11 +121,10 @@ Student &Student::operator=(const Student &rhs)
 }
 double Student::calculateFine(int days) const { return days * STUDENT_FINE_RATE; }
 int Student::getAllowedDays() const { return 14; }
+string Student::getExtra() const { return degree_; }
+void Student::setExtra(const string &ex) { degree_ = ex; }
 bool Student::hasDegree(const string &d) const { return degree_ == d; }
-int Student::getBorrowLimit() const
-{
-    return 3;
-}
+int Student::getBorrowLimit() const { return 3; }
 string Student::toCSV() const { return "Student," + LibraryMember::toCSV() + "," + degree_; }
 void Student::displayDetails() const
 {
@@ -132,7 +132,7 @@ void Student::displayDetails() const
     cout << "Degree: " << degree_ << endl;
 }
 
-Faculty::Faculty(const string &n, const string &e, int p, int i, int b, const string &md, const string &dept) : LibraryMember(n, e, p, i, b, md), department_(dept) {}
+Faculty::Faculty(const string &n, const string &e, const string &p, int i, int b, const string &md, const string &dept) : LibraryMember(n, e, p, i, b, md), department_(dept) {}
 Faculty::~Faculty() {}
 Faculty::Faculty(const Faculty &rhs) : LibraryMember(rhs), department_(rhs.department_) {}
 Faculty &Faculty::operator=(const Faculty &rhs)
@@ -147,15 +147,33 @@ Faculty &Faculty::operator=(const Faculty &rhs)
 }
 double Faculty::calculateFine(int days) const { return days * FACULTY_FINE_RATE; }
 int Faculty::getAllowedDays() const { return 30; }
+string Faculty::getExtra() const { return department_; }
+void Faculty::setExtra(const string &ex) { department_ = ex; }
 bool Faculty::isFromDept(const string &dept) const { return department_ == dept; }
-int Faculty::getBorrowLimit() const
-{
-    return 5;
-}
+int Faculty::getBorrowLimit() const { return 5; }
 string Faculty::toCSV() const { return "Faculty," + LibraryMember::toCSV() + "," + department_; }
 
 void Faculty::displayDetails() const
 {
     LibraryMember::displayDetails();
+    cout << "================================================ Member Details ================================================" << endl;
+
+    cout << left
+         << setw(20) << "Member ID" << "| "
+         << setw(20) << "Name" << "| "
+         << setw(20) << "Email" << "| "
+         << setw(20) << "Phone" << "| "
+         << setw(20) << "Number Of Books Borrowed" << "| "
+         << endl;
+
+    cout << string(113, '-') << endl;
+
+    cout << left
+         << setw(20) << memberID_ << "| "
+         << setw(20) << name_ << "| "
+         << setw(20) << email_ << "| "
+         << setw(20) << phone_ << "| "
+         << setw(20) << booksBorrowed_ << "| " << endl;
+
     cout << "Department: " << department_ << endl;
 }

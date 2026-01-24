@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <limits>
 #include <fstream>
 #include <algorithm>
 
@@ -29,7 +30,7 @@ public:
     int getBookID() const;
     string getDateOfIssue() const;
     string getDateOfReturn() const;
-    double getFine();
+    double getFine() const;
     bool isReturned() const;
 
     void setReturned(bool r);

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
 #include <iomanip>
 #include <fstream>
 #include <algorithm>
@@ -22,17 +23,10 @@ private:
 public:
     Library();
     ~Library();
+    BooksManager &getBooksManager();
+    MemberManager &getMemberManager();
 
-    // BOOK OPERATIONS
-    void addBook();
-    void removeBook();
-    void displayBooks();
-
-    // MEMBER OPERATIONS
-    void addMember();
-    void removeMember();
-    void displayMembers();
-
+    void showMemberHistory();
     // ISSUE / RETURN
     void issueBook();
     void returnBooks();

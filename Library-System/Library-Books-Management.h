@@ -2,10 +2,12 @@
 #define LIBRARY_BOOKS_H
 #include "Books.h"
 #include "members.h"
+#include "DateUtils.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <limits>
 #include <fstream>
 #include <algorithm>
 
@@ -21,15 +23,15 @@ public:
     void saveBooks();
     void addBook();
     Book *searchByID();
-    Book *searchByTitle();
-    Book *searchByAuthor();
+    void searchByTitle();
+    void searchByAuthor();
     Book *searchByISBN();
     void removeBook();
     void updateBook();
     int getTotalBooks();
     int getAvailableBooks();
 
-    void displayBooks() const;
+    void displayBooks();
 };
 
 #endif

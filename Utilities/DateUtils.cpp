@@ -1,6 +1,9 @@
 #include "DateUtils.h"
 #include <cctype>
 #include <string>
+#include <limits>
+#include <iostream>
+using namespace std;
 
 bool checkDate(const std::string &date)
 {
@@ -51,4 +54,17 @@ int dateToDays(const std::string &date)
         totalDays += daysInMonth[i];
 
     return totalDays;
+}
+
+int getValidInteger()
+{
+    int input;
+    while (!(cin >> input))
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input! Please enter a number: ";
+    }
+
+    return input;
 }

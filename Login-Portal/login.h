@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <limits>
 #include <iostream>
 
 struct User
@@ -16,7 +17,7 @@ class AuthManager
 {
 private:
     std::vector<User> users;
-    const std::string filename = "login.csv";
+    const std::string filename = "Data/login.csv";
     void loadUsers();
     std::string getMaskedPassword(); // The masking logic
 

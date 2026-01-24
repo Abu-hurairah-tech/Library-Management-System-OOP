@@ -7,14 +7,17 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
 #include <iomanip>
 #include <sstream>
 #include <fstream>
 #include <algorithm>
 using namespace std;
 
-Library::Library() {}
+Library::Library() { loadIssuedBooks(); }
 Library::~Library() {}
+BooksManager &Library::getBooksManager() { return booksMgr; }
+MemberManager &Library::getMemberManager() { return membersMgr; }
 
 void Library::loadIssuedBooks()
 {
@@ -54,7 +57,7 @@ void Library::loadIssuedBooks()
 
 void Library::saveIssuedBooks()
 {
-    ofstream outputFile("Issue.csv");
+    ofstream outputFile("Data/Issue.csv");
     if (!outputFile)
         return;
 
@@ -188,32 +191,48 @@ void Library::returnBooks()
     cout << "No active issue record found for this book and member! " << endl;
 }
 
-void Library::addBook()
+void Library::showMemberHistory()
 {
-    booksMgr.addBook();
-}
+    int memberID;
 
-void Library::removeBook()
-{
-    booksMgr.removeBook();
-}
+    cout << "Enter Member ID: ";
+    while (true)
+    {
+        cin >> memberID;
 
-void Library::displayBooks()
-{
-    booksMgr.displayBooks();
-}
+        // Check for non-numeric input OR non-positive number
+        if (cin.fail() || memberID <= 0)
+        {
+            cin.clear(); // clear fail state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid ID! Enter a positive number: ";
+        }
+        else
+        {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            break;
+        }
+    }
 
-void Library::addMember()
-{
-    membersMgr.addMember();
-}
+    cout << "\nIssue History for Member ID: " << memberID << endl;
 
-void Library::removeMember()
-{
-    membersMgr.removeMember();
-}
+    bool found = false;
 
-void Library::displayMembers()
-{
-    membersMgr.displayMembers();
+    for (const auto &record : issuedBooks)
+    {
+        if (record.getMemberID() == memberID)
+        {
+            found = true;
+            cout << "Book ID: " << record.getBookID()
+                 << " | Issued: " << record.getDateOfIssue()
+                 << " | Returned: " << (record.isReturned() ? "Yes" : "No")
+                 << " | Fine: Rs. " << record.getFine()
+                 << endl;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "No issue history found for this member.\n";
+    }
 }

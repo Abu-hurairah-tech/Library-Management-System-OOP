@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <limits>
 #include <fstream>
 #include <algorithm>
 using namespace std;
@@ -12,19 +13,19 @@ class Person
 protected:
     string name_;
     string email_;
-    int phone_;
+    string phone_;
 
 public:
     Person();
-    Person(const string &n = "", const string &e = "", int p = 0);
-    Person (const Person& rhs);
-    Person& operator=(const Person& rhs);
+    Person(const string &n = "", const string &e = "", const string &p = "0");
+    Person(const Person &rhs);
+    Person &operator=(const Person &rhs);
     string getName() const;
     string getEmail() const;
-    int getPhone() const;
+    string getPhone() const;
     void setName(string n);
     void setEmail(string e);
-    void setPhone(int p);
+    void setPhone(const string &p);
     virtual ~Person();
     virtual void displayDetails() const = 0;
 };
@@ -37,7 +38,7 @@ protected:
     string membershipDate_;
 
 public:
-    LibraryMember(const string &n = "", const string &e = "", int p = 0, int i = 0, int b = 0, const string &md = "");
+    LibraryMember(const string &n = "", const string &e = "", const string &p = "0", int i = 0, int b = 0, const string &md = "");
     virtual ~LibraryMember();
     LibraryMember(const LibraryMember &rhs);
     LibraryMember &operator=(const LibraryMember &rhs);
@@ -45,9 +46,11 @@ public:
     int getNumberOfBooksBorrowed() const;
     virtual int getBorrowLimit() const = 0;
     string getMembershipDate() const;
+    virtual string getExtra() const = 0;
     void setMemberID(int i);
     void setNumberOfBooksBorrowed(int b);
     void setMembershipDate(const string &d);
+    virtual void setExtra(const string &ex) = 0;
     virtual double calculateFine(int days) const;
     virtual int getAllowedDays() const = 0;
     bool operator==(int i) const;
@@ -62,13 +65,15 @@ private:
     string degree_;
 
 public:
-    Student(const string &n = "", const string &e = "", int p = 0, int i = 0, int b = 0, const string &md = "", const string &d = "");
+    Student(const string &n = "", const string &e = "", const string &p = "0", int i = 0, int b = 0, const string &md = "", const string &d = "");
     ~Student() override;
     Student(const Student &rhs);
     Student &operator=(const Student &rhs);
     double calculateFine(int days) const override;
     int getAllowedDays() const override;
     int getBorrowLimit() const override;
+    void setExtra(const string& ex) override;
+    string getExtra() const override;
     void displayDetails() const override;
     bool hasDegree(const string &d) const;
     string toCSV() const override;
@@ -80,7 +85,7 @@ private:
     string department_;
 
 public:
-    Faculty(const string &n = "", const string &e = "", int p = 0, int i = 0, int b = 0, const string &md = "", const string &dept = "");
+    Faculty(const string &n = "", const string &e = "", const string &p = "0", int i = 0, int b = 0, const string &md = "", const string &dept = "");
     ~Faculty() override;
     Faculty(const Faculty &rhs);
     Faculty &operator=(const Faculty &rhs);
@@ -88,7 +93,9 @@ public:
     int getAllowedDays() const override;
     bool isFromDept(const string &dept) const;
     void displayDetails() const override;
+    void setExtra(const string& ex) override;
     string toCSV() const override;
     int getBorrowLimit() const override;
+    string getExtra() const override;
 };
 #endif

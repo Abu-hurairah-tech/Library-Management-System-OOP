@@ -1,8 +1,10 @@
 #include "Books.h"
 #include "members.h"
 #include "Library-Books-Management.h"
+#include "DateUtils.h"
 #include <iostream>
 #include <string>
+#include <limits>
 #include <vector>
 #include <iomanip>
 #include <fstream>
@@ -10,17 +12,32 @@
 #include <algorithm>
 using namespace std;
 
-bool checkISBN(int i)
+bool checkISBN(const string &i)
 {
-    return i >= 1000000000 && i <= 9999999999;
+    // 1. Check for exact length (10 digits)
+    if (i.length() != 10)
+    {
+        return false;
+    }
+
+    // 2. Ensure every character is a digit '0'-'9'
+    for (char c : i)
+    {
+        if (!isdigit(c))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
-BooksManager::BooksManager() {}
+BooksManager::BooksManager() { loadBooks(); }
 BooksManager::~BooksManager() {}
 
 void BooksManager::loadBooks()
 {
-    ifstream inputFile("Books.csv");
+    ifstream inputFile("Data/Books.csv");
     if (!inputFile)
         return;
     string line;
@@ -38,12 +55,11 @@ void BooksManager::loadBooks()
         getline(ss, copiesStr);
 
         int id = idStr.empty() ? 0 : stoi(idStr);
-        int isbn = isbnStr.empty() ? 0 : stoi(isbnStr);
         int copies = copiesStr.empty() ? 0 : stoi(copiesStr);
 
         if (!idStr.empty())
         {
-            Book b(id, titleStr, authorStr, isbn);
+            Book b(id, titleStr, authorStr, isbnStr);
             if (!statusStr.empty())
                 b.setStatus(statusStr);
             if (copies > 0)
@@ -55,7 +71,7 @@ void BooksManager::loadBooks()
 }
 void BooksManager::saveBooks()
 {
-    ofstream outputFile("Books.csv");
+    ofstream outputFile("Data/Books.csv");
     if (!outputFile)
         return;
 
@@ -72,76 +88,86 @@ void BooksManager::saveBooks()
 void BooksManager::addBook()
 {
 
-    string title, author;
-    int id, isbn;
-
-    cout << "Enter Book ID: ";
+    string title, author, isbn;
+    int id;
+    bool idExists, isbnExists;
     do
     {
-        cin >> id;
+        idExists = false;
+        cout << "Enter Book ID: ";
 
-        if (cin.fail() || id <= 0)
+        id = getValidInteger();
+
+        if (id <= 0)
         {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid ID. Try again: ";
+            cout << "ID must be a positive number!\n";
+            idExists = true;
+            continue;
         }
 
-    } while (cin.fail() || id <= 0);
-
-    for (const auto &b : books)
-    {
-        if (b.getID() == id)
+        for (const auto &b : books)
         {
-            cout << "Book with this ID already exists!" << endl;
-            return;
+            if (b.getID() == id)
+            {
+                cout << "Book with this ID already exists! Try a different ID.\n";
+                idExists = true;
+                break;
+            }
         }
-    }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    } while (idExists);
 
+    if (cin.peek() == '\n')
+        cin.ignore();
     cout << "Enter Book Title: ";
     getline(cin, title);
     cout << "Enter Book Author: ";
     getline(cin, author);
     bool validISBN = false;
-    cout << "Enter ISBN:";
     do
     {
-        cin >> isbn;
+        cout << "Enter ISBN: ";
+        getline(cin, isbn);
+
+        // 2. Uniqueness Check: Ensure another book doesn't already have this ISBN
+        bool isDuplicate = false;
         for (const auto &b : books)
         {
             if (b.getISBN() == isbn)
             {
-                cout << "Book with this ISBN already exists!" << endl;
-                return;
+                cout << "Book with this ISBN already exists! Try again.\n";
+                isDuplicate = true;
+                break;
             }
         }
+
+        if (isDuplicate)
+            continue; // Restart loop if it's a duplicate
+
+        // 3. Format Check: Use your existing checkISBN logic (range check)
         if (checkISBN(isbn))
-            validISBN = true;
+        {
+            validISBN = true; // All checks passed!
+        }
         else
         {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid ISBN! Try Again." << endl;
+            cout << "Invalid ISBN format! (Must be 10 digits). Try Again.\n";
         }
+
     } while (!validISBN);
-    cin.ignore();
 
     Book newBook(id, title, author, isbn);
     int copies;
-    cout << "Enter number of copies: ";
     do
     {
-        cin >> copies;
+        cout << "Enter number of copies: ";
+        copies = getValidInteger();
 
-        if (cin.fail() || copies <= 0)
+        if (copies <= 0)
         {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid copies. Try again: ";
+            cout << "Copies must be a positive number!\n";
+            continue;
         }
-
-    } while (cin.fail() || copies <= 0);
+    } while (copies <= 0);
     newBook.setCopies(copies);
     books.push_back(newBook);
     saveBooks();
@@ -158,15 +184,7 @@ Book *BooksManager::searchByID()
 
     int id;
     cout << "Enter Book ID to search: ";
-    cin >> id;
-    while (cin.fail() || id <= 0)
-    {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid ID. Try again: ";
-        cin >> id;
-    }
-
+    id = getValidInteger();
     for (auto &b : books)
     {
         if (b.getID() == id)
@@ -178,52 +196,90 @@ Book *BooksManager::searchByID()
     return nullptr;
 }
 
-Book *BooksManager::searchByTitle()
+void BooksManager::searchByTitle()
 {
     if (books.empty())
     {
         cout << "No books to search.\n";
-        return nullptr;
+        return;
     }
 
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     string title;
-    cout << "Enter Book title to search: ";
+    cout << "Enter Book Title to search: ";
     getline(cin, title);
 
-    for (auto &b : books)
+    bool found = false;
+
+    cout << "\n==================Matching Books:==================\n";
+    cout << left << setw(10) << "ID"
+         << setw(25) << "Title"
+         << setw(25) << "Author"
+         << setw(15) << "ISBN"
+         << endl;
+
+    cout << string(75, '-') << endl;
+
+    for (const auto &b : books)
     {
         if (b.getTitle() == title)
         {
-            return &b;
+            found = true;
+            cout << left << setw(10) << b.getID()
+                 << setw(25) << b.getTitle()
+                 << setw(25) << b.getAuthor()
+                 << setw(15) << b.getISBN()
+                 << endl;
         }
     }
-    cout << "Book Not Found" << endl;
-    return nullptr;
+
+    if (!found)
+        cout << "No books found with this title.\n";
 }
-Book *BooksManager::searchByAuthor()
+
+void BooksManager::searchByAuthor()
 {
     if (books.empty())
     {
         cout << "No books to search.\n";
-        return nullptr;
+        return;
     }
 
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     string author;
     cout << "Enter Book Author to search: ";
     getline(cin, author);
 
-    for (auto &b : books)
+    bool found = false;
+
+    cout << "\n==================Matching Books:==================\n";
+    cout << left << setw(10) << "ID"
+         << setw(25) << "Title"
+         << setw(25) << "Author"
+         << setw(15) << "ISBN"
+         << endl;
+
+    cout << string(75, '-') << endl;
+
+    for (const auto &b : books)
     {
         if (b.getAuthor() == author)
         {
-            return &b;
+            found = true;
+            cout << left << setw(10) << b.getID()
+                 << setw(25) << b.getTitle()
+                 << setw(25) << b.getAuthor()
+                 << setw(15) << b.getISBN()
+                 << endl;
         }
     }
-    cout << "Book Not Found" << endl;
-    return nullptr;
+
+    if (!found)
+        cout << "No books found for this author.\n";
 }
+
 Book *BooksManager::searchByISBN()
 {
     if (books.empty())
@@ -232,16 +288,24 @@ Book *BooksManager::searchByISBN()
         return nullptr;
     }
 
-    int isbn;
-    cout << "Enter Book ISBN to search: ";
-    cin >> isbn;
-    while (cin.fail())
+    string isbn;
+    bool validFormat = false;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    do
     {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid ISBN. Try again: ";
-        cin >> isbn;
-    }
+        cout << "Enter Book ISBN to search: ";
+        getline(cin, isbn);
+
+        if (checkISBN(isbn))
+        {
+            validFormat = true;
+        }
+        else
+        {
+            cout << "Invalid format! ISBN must be exactly 10 digits. Try again.\n";
+        }
+    } while (!validFormat);
 
     for (auto &b : books)
     {
@@ -250,6 +314,7 @@ Book *BooksManager::searchByISBN()
             return &b;
         }
     }
+
     cout << "Book Not Found" << endl;
     return nullptr;
 }
@@ -303,7 +368,7 @@ void BooksManager::updateBook()
         return;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     string title, author;
-    int isbn;
+    string isbn;
 
     cout << "--Update Book--" << endl;
     cout << "Current Title: " << b->getTitle() << endl;
@@ -321,49 +386,78 @@ void BooksManager::updateBook()
         b->setAuthor(author);
 
     cout << "Current ISBN: " << b->getISBN() << endl;
-    cout << "Enter Book ISBN (Enter 0 to keep the same): ";
-    cin >> isbn;
-    if (!cin.fail() && isbn != 0)
+
+    string newIsbn;
+    bool validUpdate = false;
+
+    do
     {
+        cout << "Enter Book ISBN (leave empty to keep the same): ";
+        getline(cin, newIsbn);
+
+        if (newIsbn.empty())
+        {
+            validUpdate = true;
+            break;
+        }
+
+        if (!checkISBN(newIsbn))
+        {
+            cout << "Invalid ISBN format! Must be 10 digits. Try again.\n";
+            continue;
+        }
+
+        bool isDuplicate = false;
         for (const auto &bk : books)
         {
-            if (bk.getISBN() == isbn && bk.getID() != b->getID())
+            if (bk.getISBN() == newIsbn && bk.getID() != b->getID())
             {
-                cout << "Another book already has this ISBN!\n";
-                return;
+                cout << "Another book already has this ISBN! Try again.\n";
+                isDuplicate = true;
+                break;
             }
         }
 
-        if (checkISBN(isbn))
-            b->setISBN(isbn);
-        else
+        if (!isDuplicate)
         {
-            cout << "Invalid ISBN. Update cancelled.\n";
-            return;
+            b->setISBN(newIsbn);
+            validUpdate = true;
         }
-    }
+
+    } while (!validUpdate);
     saveBooks();
     cout << "Book updated successfully.\n";
 }
 
-void BooksManager::displayBooks() const
+void BooksManager::displayBooks()
 {
+    loadBooks();
     if (books.empty())
     {
         cout << "No books available.\n";
         return;
     }
 
-    cout << left << setw(10) << "ID"
-         << setw(25) << "Title"
-         << setw(20) << "Author"
-         << setw(10) << "Copies" << endl;
+    cout << "============================================== Book Details ==============================================" << endl;
+
+    cout << left
+         << setw(5) << "ID" << "| "
+         << setw(20) << "Title" << "| "
+         << setw(20) << "Author(s)" << "| "
+         << setw(15) << "ISBN" << "| "
+         << setw(20) << "Status" << "| "
+         << setw(15) << "Copies" << "|\n";
+
+    cout << string(106, '-') << endl;
 
     for (const auto &b : books)
     {
-        cout << left << setw(10) << b.getID()
-             << setw(25) << b.getTitle()
-             << setw(20) << b.getAuthor()
-             << setw(10) << b.getCopies() << endl;
+        cout << left
+             << setw(5) << b.getID() << "| "
+             << setw(20) << b.getTitle() << "| "
+             << setw(20) << b.getAuthor() << "| "
+             << setw(15) << b.getISBN() << "| "
+             << setw(20) << b.getStatus() << "| "
+             << setw(15) << b.getCopies() << endl;
     }
 }

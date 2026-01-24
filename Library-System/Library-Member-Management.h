@@ -7,6 +7,7 @@
 #include <vector>
 #include <iomanip>
 #include <fstream>
+#include <limits>
 #include <algorithm>
 
 class MemberManager
@@ -20,8 +21,9 @@ public:
     void loadMembers();
     void saveMembers();
     void addMember();
-    LibraryMember* searchMember() const;
+    LibraryMember *searchMember() const;
     void removeMember();
-    void displayMembers() const;
+    void updateMember();
+    void displayMembers();
 };
 #endif

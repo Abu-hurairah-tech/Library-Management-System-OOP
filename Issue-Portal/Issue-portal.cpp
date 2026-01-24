@@ -1,16 +1,18 @@
 #include "Books.h"
 #include "members.h"
 #include "Library.h"
-#include "Issue.h"
 #include "Library-Books-Management.h"
 #include "Library-Member-Management.h"
 #include "DateUtils.h"
+#include "Issue.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <iomanip>
 #include <fstream>
 #include <algorithm>
+#include <limits>
+
 using namespace std;
 
 int IssueRecords::getDaysOverdue(const string &dueDate) const
@@ -63,7 +65,7 @@ IssueRecords ::~IssueRecords() {}
 int IssueRecords::getMemberID() const { return memberID_; }
 int IssueRecords::getBookID() const { return bookID_; }
 string IssueRecords::getDateOfIssue() const { return dateOfIssue_; }
-double IssueRecords::getFine() { return fine_; }
+double IssueRecords::getFine() const { return fine_; }
 string IssueRecords::getDateOfReturn() const { return dateOfReturn_; }
 bool IssueRecords::isReturned() const { return returnStatus_; }
 

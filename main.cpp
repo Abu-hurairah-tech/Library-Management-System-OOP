@@ -1,8 +1,115 @@
 #include <iostream>
-#include "login.h"
-#include "Library.h"
+#include "Login-Portal/login.h"
+#include "Library-System/Library.h"
+#include "Utilities\DateUtils.h"
+#include <limits>
 
 using namespace std;
+
+void booksMenu(Library &library)
+{
+    int choice;
+
+    while (true)
+    {
+        cout << "\n----- BOOKS MANAGEMENT -----\n";
+        cout << "1. Add Book\n";
+        cout << "2. Remove Book\n";
+        cout << "3. Search Book\n";
+        cout << "4. View Books\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+
+        choice = getValidInteger();
+
+        switch (choice)
+        {
+        case 1:
+            library.getBooksManager().addBook();
+            break;
+        case 2:
+            library.getBooksManager().removeBook();
+            break;
+        case 3:
+        {
+            cout << "\n--- Search By ---\n";
+            cout << "1. ID\n2. Title\n3. Author\n4. ISBN\n0. Cancel\n";
+            cout << "Enter choice: ";
+            int sChoice = getValidInteger();
+
+            Book *found = nullptr;
+            if (sChoice == 1)
+                found = library.getBooksManager().searchByID();
+            else if (sChoice == 2)
+                library.getBooksManager().searchByTitle();
+            else if (sChoice == 3)
+                library.getBooksManager().searchByAuthor();
+            else if (sChoice == 4)
+                found = library.getBooksManager().searchByISBN();
+            else if (sChoice == 0)
+                break;
+            else
+            {
+                cout << "Invalid option!\n";
+                break;
+            }
+
+            if (found)
+                cout << "\nBook Found:\n"
+                     << *found << endl;
+            break;
+        }
+        case 4:
+            library.getBooksManager().displayBooks();
+            break;
+        case 0:
+            return;
+        default:
+            cout << "Invalid option!\n";
+        }
+    }
+}
+
+void membersMenu(Library &library)
+{
+    int choice;
+    while (true)
+    {
+        cout << "\n----- MEMBERS MANAGEMENT -----\n";
+        cout << "1. Add Member\n";
+        cout << "2. Remove Member\n";
+        cout << "3. Update Member\n";
+        cout << "4. View Members\n";
+        cout << "5. Show Member History\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+
+        choice = getValidInteger();
+
+        switch (choice)
+        {
+        case 1:
+            library.getMemberManager().addMember();
+            break;
+        case 2:
+            library.getMemberManager().removeMember();
+            break;
+        case 3:
+            library.getMemberManager().updateMember();
+            break;
+        case 4:
+            library.getMemberManager().displayMembers();
+            break;
+        case 5:
+            library.showMemberHistory();
+            break;
+        case 0:
+            return;
+        default:
+            cout << "Invalid option!\n";
+        }
+    }
+}
 
 int main()
 {
@@ -10,36 +117,50 @@ int main()
     Library library;
     library.loadIssuedBooks();
 
-    int choice;
+    int loginChoice;
 
     cout << "=============================\n";
     cout << "  LIBRARY MANAGEMENT SYSTEM  \n";
     cout << "=============================\n";
 
     // ---------- LOGIN FLOW ----------
-    while (true)
+    int loginAttempts = 0; // Track failed attempts
+
+    do
     {
         cout << "\n1. Login";
         cout << "\n2. Register";
         cout << "\n0. Exit";
         cout << "\nEnter choice: ";
-        cin >> choice;
-        cin.ignore();
 
-        if (choice == 1)
+        loginChoice = getValidInteger();
+
+        if (loginChoice == 1)
         {
             if (auth.login())
             {
                 cout << "\nLogin Successful!\n";
-                break;
+                break; // Proceed to main system
             }
-            cout << "Invalid credentials!\n";
+            else
+            {
+                loginAttempts++;
+                int remaining = 3 - loginAttempts;
+
+                if (loginAttempts >= 3)
+                {
+                    cout << "\nInvalid credentials! 3 failed attempts. Exiting system..." << endl;
+                    return 0; // Terminate the entire program
+                }
+
+                cout << "Invalid credentials! You have " << remaining << " attempts left.\n";
+            }
         }
-        else if (choice == 2)
+        else if (loginChoice == 2)
         {
             auth.registerUser();
         }
-        else if (choice == 0)
+        else if (loginChoice == 0)
         {
             return 0;
         }
@@ -47,50 +168,36 @@ int main()
         {
             cout << "Invalid choice!\n";
         }
-    }
 
-    // ---------- MAIN LIBRARY MENU ----------
+    } while (true);
+
+    int choice;
+
     while (true)
     {
         cout << "\n=========== MAIN MENU ==========\n";
-        cout << "1. Add Book\n";
-        cout << "2. Remove Book\n";
-        cout << "3. View Books\n";
-        cout << "4. Add Member\n";
-        cout << "5. Remove Member\n";
-        cout << "6. View Members\n";
-        cout << "7. Issue Book\n";
-        cout << "8. Return Book\n";
+        cout << "1. Books Management\n";
+        cout << "2. Members Management\n";
+        cout << "3. Issue Book\n";
+        cout << "4. Return Book\n";
         cout << "0. Exit\n";
         cout << "Enter choice: ";
 
-        cin >> choice;
-        cin.ignore();
+        // Single point of entry for the input
+        choice = getValidInteger();
 
         switch (choice)
         {
         case 1:
-            library.addBook();
+            booksMenu(library);
             break;
         case 2:
-            library.removeBook();
+            membersMenu(library);
             break;
         case 3:
-            library.displayBooks();
-            break;
-        case 4:
-            library.addMember();
-            break;
-        case 5:
-            library.removeMember();
-            break;
-        case 6:
-            library.displayMembers();
-            break;
-        case 7:
             library.issueBook();
             break;
-        case 8:
+        case 4:
             library.returnBooks();
             break;
         case 0:
